@@ -1,5 +1,7 @@
 package tk.niush.staticrecyclerview;
 
+import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -36,19 +39,25 @@ public class MainActivity extends AppCompatActivity {
     List<News> newsList;
     String result = "";
 
-    ProgressBar loader;
+    RelativeLayout loading_screen;
+    //ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loader = (ProgressBar) findViewById(R.id.loader);
-        loader.animate().scaleX(0).setDuration(100).setStartDelay(5000);
-
         newsList = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
+        recyclerView.isLongClickable();
+        recyclerView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Toast.makeText(MainActivity.this, ":)", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 //        newsList.add(new News(1,R.drawable.ic_launcher_background,"Title One","Aue 1","Lorem ipsum le lorem bla bla lorem ipsum kjasd kajsnd kasd asd ajs dasd asdoa sdaosidniasodna askjda sd as dasjdasjdnasdandandansdkjdanskdj"));
@@ -128,12 +137,21 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(MainActivity.this, "Fetching News, If you see this it is fetching", Toast.LENGTH_SHORT).show();
+            loading_screen = (RelativeLayout) findViewById(R.id.loading_screen);
+            /*dialog = new ProgressDialog(getApplicationContext());
+            dialog.setMessage("Loading...");
+            dialog.setIndeterminate(true);
+            dialog.setCancelable(false);
+            dialog.show();*/
+
+            //Toast.makeText(MainActivity.this, "Fetching News, If you see this it is fetching", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            //dialog.dismiss();
+            loading_screen.animate().scaleX(0).translationXBy(2000).setDuration(1000).setStartDelay(500);
 
             String status = "";
             String title = "";
@@ -141,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
             String description = "";
             String articles = "";
             String image = "";
+            String url = "";
 
             try {
                 JSONObject jsonObject = new JSONObject(result);
@@ -167,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
                         author = jsonObjectArticles.getString("author");
                         description = jsonObjectArticles.getString("description");
                         image = jsonObjectArticles.getString("urlToImage");
+                        url = jsonObjectArticles.getString("url");
 
                         if (status.equals("error")) {
                             Toast.makeText(MainActivity.this, "API ERROR", Toast.LENGTH_SHORT).show();
@@ -177,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                             //NOTE: BUG: ERROR ASYNC FOR IMAGE DOWNLOAD NEEDED
                             try {
                                 //Bitmap myBitmap = id.execute(iconUrl).get();
-                                newsArrayList.add(new News(i, new IconDownloader().execute(iconUrl).get(), title, author, description));
+                                newsArrayList.add(new News(i, new IconDownloader().execute(iconUrl).get(), title, author, description, url));
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             } catch (ExecutionException e) {
@@ -235,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        handler.postDelayed(run,100);
+        handler.postDelayed(run,500);
     }
 
     public void addToList(ArrayList<News> newsArrayList){
@@ -244,6 +264,10 @@ public class MainActivity extends AppCompatActivity {
         }
         adapter = new NewsAdapter(this, newsList);
         recyclerView.setAdapter(adapter);
+    }
+
+    public void showToast(String message){
+        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
 //    public void addToList(int id, Bitmap image, String title, String author, String description){

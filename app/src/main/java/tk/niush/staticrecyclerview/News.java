@@ -8,13 +8,15 @@ public class News {
     private String title;
     private String author;
     private String description;
+    private String url;
 
-    public News(int id, Bitmap image, String title, String author, String description) {
+    public News(int id, Bitmap image, String title, String author, String description, String url) {
         this.id = id;
         this.image = image;
         this.title = title;
         this.author = author;
         this.description = description;
+        this.url = url;
     }
 
     public int getId() {
@@ -35,5 +37,9 @@ public class News {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getUrl() {
+        return url;
     }
 }

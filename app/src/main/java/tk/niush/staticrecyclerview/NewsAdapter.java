@@ -1,8 +1,10 @@
 package tk.niush.staticrecyclerview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,16 +38,26 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(mCtx);
         View view = inflater.inflate(R.layout.list_layout, null);
+
         return new NewsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NewsViewHolder newsViewHolder, int i) {
+    public void onBindViewHolder(@NonNull NewsViewHolder newsViewHolder, final int i) {
         News news = newsList.get(i);
         newsViewHolder.descriptionView.setText(news.getDescription());
         newsViewHolder.titleView.setText(news.getTitle());
         newsViewHolder.authorView.setText(news.getAuthor());
         newsViewHolder.imageView.setImageBitmap(news.getImage());
+
+        newsViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openNews = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(newsList.get(i).getUrl().toString()));
+                mCtx.startActivity(openNews);
+                Toast.makeText(mCtx, "Opening In Browser", Toast.LENGTH_SHORT).show();
+            }
+        });
         //newsViewHolder.imageView.setImageDrawable(mCtx.getResources().getDrawable(news.getImage()));
         //newsViewHolder.imageView.setImageBitmap(getImage());
     }
@@ -61,8 +74,20 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         TextView authorView;
         TextView descriptionView;
 
+        View view;
+
         NewsViewHolder(@NonNull View itemView) {
             super(itemView);
+            view = itemView;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    imageView.performClick();
+                    /*Intent openNews = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.example.com"));
+                    mCtx.startActivity(openNews);
+                    Toast.makeText(mCtx, "Opening In Browser", Toast.LENGTH_SHORT).show();*/
+                }
+            });
 
             imageView = itemView.findViewById(R.id.image);
             titleView = itemView.findViewById(R.id.title);
