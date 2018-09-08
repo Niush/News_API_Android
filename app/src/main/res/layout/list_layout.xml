@@ -16,18 +16,15 @@
             <LinearLayout
                 android:id="@+id/image_container"
                 android:layout_width="100dp"
-                android:layout_height="100dp">
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="0dp"
-                    android:layout_alignParentLeft="true"
-                    android:cropToPadding="false"
-                    android:layout_marginStart="@dimen/cardview_default_radius"
-                    android:paddingStart="@dimen/cardview_compat_inset_shadow"
-                    android:src="@drawable/ic_launcher_background"/>
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:layout_alignParentLeft="true" />
 
             </LinearLayout>
 

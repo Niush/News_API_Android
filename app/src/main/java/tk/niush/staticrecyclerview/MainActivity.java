@@ -3,8 +3,10 @@ package tk.niush.staticrecyclerview;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -24,6 +27,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -112,8 +116,12 @@ public class MainActivity extends AppCompatActivity {
 
         public class IconDownloader extends AsyncTask<String,Void,Bitmap> {
 
+            private Bitmap myBitmap = null;
+
+            //Photo Loading is Taking A Lot Of Time...ui overload..and stuck
+
             @Override
-            protected Bitmap doInBackground(String... urls) {
+            protected Bitmap doInBackground(final String... urls) {
                 URL url;
                 HttpURLConnection httpURLConnection = null;
 
@@ -123,8 +131,11 @@ public class MainActivity extends AppCompatActivity {
                     httpURLConnection.connect();
                     InputStream in = httpURLConnection.getInputStream();
 
-                    Bitmap myBitmap = BitmapFactory.decodeStream(in);
-                    return myBitmap;
+                    myBitmap = BitmapFactory.decodeStream(in);
+                    //Image Size//
+                    int nh = (int) (myBitmap.getHeight() * (100.0 / myBitmap.getWidth()));
+                    Bitmap scaled = Bitmap.createScaledBitmap(myBitmap, 100, nh, true);
+                    return scaled;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -132,17 +143,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return null;
             }
+
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             loading_screen = (RelativeLayout) findViewById(R.id.loading_screen);
-            /*dialog = new ProgressDialog(getApplicationContext());
-            dialog.setMessage("Loading...");
-            dialog.setIndeterminate(true);
-            dialog.setCancelable(false);
-            dialog.show();*/
 
             //Toast.makeText(MainActivity.this, "Fetching News, If you see this it is fetching", Toast.LENGTH_SHORT).show();
         }
@@ -151,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             //dialog.dismiss();
-            loading_screen.animate().scaleX(0).translationXBy(2000).setDuration(1000).setStartDelay(500);
+            loading_screen.animate().translationYBy(500).setDuration(500).setStartDelay(1000);
 
             String status = "";
             String title = "";
@@ -268,6 +275,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void showToast(String message){
         Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+
+//    public void intenter(String url){
+//        Intent newsIntent = new Intent(this, NewsActivity.class);
+//        newsIntent.putExtra("url",url);
+//        this.startActivity(newsIntent);
+//    }
+
+    public void intenter(){
+        Intent newsIntent = new Intent(this, NewsActivity.class);
+        this.startActivity(newsIntent);
     }
 
 //    public void addToList(int id, Bitmap image, String title, String author, String description){

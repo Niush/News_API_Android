@@ -1,5 +1,6 @@
 package tk.niush.staticrecyclerview;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -43,8 +44,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NewsViewHolder newsViewHolder, final int i) {
-        News news = newsList.get(i);
+    public void onBindViewHolder(@NonNull final NewsViewHolder newsViewHolder, final int i) {
+        final News news = newsList.get(i);
         newsViewHolder.descriptionView.setText(news.getDescription());
         newsViewHolder.titleView.setText(news.getTitle());
         newsViewHolder.authorView.setText(news.getAuthor());
@@ -53,9 +54,20 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         newsViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent openNews = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(newsList.get(i).getUrl().toString()));
-                mCtx.startActivity(openNews);
-                Toast.makeText(mCtx, "Opening In Browser", Toast.LENGTH_SHORT).show();
+                //Intent openNews = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(newsList.get(i).getUrl().toString()));
+                //mCtx.startActivity(openNews);
+
+//                MainActivity mainActivity = new MainActivity();
+//                mainActivity.intenter(newsList.get(i).getUrl().toString());
+//                mainActivity.intenter();
+
+                Toast.makeText(mCtx, news.getTitle(), Toast.LENGTH_SHORT).show();
+                Intent newsIntent = new Intent(mCtx , NewsActivity.class);
+                //newsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                ActivityOptions options = ActivityOptions.makeCustomAnimation(mCtx, R.anim.pull_in_from_right, R.anim.pull_out_to_left);
+                newsIntent.putExtra("url",newsList.get(i).getUrl().toString());
+                newsIntent.putExtra("title",newsList.get(i).getTitle().toString());
+                mCtx.startActivity(newsIntent, options.toBundle());
             }
         });
         //newsViewHolder.imageView.setImageDrawable(mCtx.getResources().getDrawable(news.getImage()));
