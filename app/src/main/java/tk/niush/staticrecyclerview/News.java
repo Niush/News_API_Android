@@ -4,13 +4,13 @@ import android.graphics.Bitmap;
 
 public class News {
     private int id;
-    private Bitmap image;
+    private String image;
     private String title;
     private String author;
     private String description;
     private String url;
 
-    public News(int id, Bitmap image, String title, String author, String description, String url) {
+    public News(int id, String image, String title, String author, String description, String url) {
         this.id = id;
         this.image = image;
         this.title = title;
@@ -23,7 +23,7 @@ public class News {
         return id;
     }
 
-    public Bitmap getImage() {
+    public String getImage() {
         return image;
     }
 

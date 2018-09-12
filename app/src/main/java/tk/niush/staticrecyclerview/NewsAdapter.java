@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -49,7 +51,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         newsViewHolder.descriptionView.setText(news.getDescription());
         newsViewHolder.titleView.setText(news.getTitle());
         newsViewHolder.authorView.setText(news.getAuthor());
-        newsViewHolder.imageView.setImageBitmap(news.getImage());
+        Picasso.get().load(news.getImage()).into(newsViewHolder.imageView);
+//        try {
+//            newsViewHolder.imageView.setImageBitmap(new IconDownloader().execute(news.getImage()).get());
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         newsViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +116,39 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             descriptionView = itemView.findViewById(R.id.description);
         }
     }
+
+    public class IconDownloader extends AsyncTask<String,Void,Bitmap> {
+
+        private Bitmap myBitmap = null;
+
+        //Photo Loading is Taking A Lot Of Time...ui overload..and stuck
+
+        @Override
+        protected Bitmap doInBackground(final String... urls) {
+            URL url;
+            HttpURLConnection httpURLConnection = null;
+
+            try {
+                url = new URL(urls[0]);
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.connect();
+                InputStream in = httpURLConnection.getInputStream();
+
+                myBitmap = BitmapFactory.decodeStream(in);
+                //Image Size//
+                int nh = (int) (myBitmap.getHeight() * (250.0 / myBitmap.getWidth()));
+                Bitmap scaled = Bitmap.createScaledBitmap(myBitmap, 250, nh, true);
+                return scaled;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+    }
+
 //
 //    public static class BackgroundTask extends AsyncTask<String,Void,Bitmap> {
 //
