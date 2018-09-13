@@ -1,6 +1,5 @@
 package tk.niush.staticrecyclerview;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity {
+public class TopNews extends AppCompatActivity {
 
     RecyclerView recyclerView;
     NewsAdapter adapter;
@@ -38,18 +37,13 @@ public class MainActivity extends AppCompatActivity {
     String result = "";
 
     RelativeLayout loading_screen;
-    RelativeLayout splash_after;
     TextView msg;
-    //ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.pull_in_from_right, R.anim.hold);
-        setContentView(R.layout.activity_main);
-
-        splash_after = (RelativeLayout) findViewById(R.id.splash_after);
-        splash_after.animate().translationYBy(-2000).setDuration(500).setStartDelay(4000);
+        setContentView(R.layout.activity_top_news);
 
         newsList = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -65,34 +59,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        newsList.add(new News(1,R.drawable.ic_launcher_background,"Title One","Aue 1","Lorem ipsum le lorem bla bla lorem ipsum kjasd kajsnd kasd asd ajs dasd asdoa sdaosidniasodna askjda sd as dasjdasjdnasdandandansdkjdanskdj"));
-//        newsList.add(new News(1,R.drawable.ic_launcher_background,"My Title 2","Dev","Lorem Ipsum"));
-//        newsList.add(new News(1,R.drawable.ic_launcher_background,"Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Is This Long Title Lorem De rom","Poka Poka","Lorem ipsum le lorem bla bla lorem ipsum kjasd kajsnd kasd asd ajs dasd asdoa sdaosidniasodna askjda sd as dasjdasjdnasdandandansdkjdanskdj"));
-//        newsList.add(new News(1,R.drawable.ic_launcher_background,"My Title 2","Dev","Lorem Ipsum"));
-//        newsList.add(new News(1,R.drawable.ic_launcher_background,"Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Is This Long Title Lorem De rom","Poka Poka","Lorem ipsum le lorem bla bla lorem ipsum kjasd kajsnd kasd asd ajs dasd asdoa sdaosidniasodna askjda sd as dasjdasjdnasdandandansdkjdanskdj"));
-//        newsList.add(new News(1,R.drawable.ic_launcher_background,"My Title 2","Dev","Lorem Ipsum"));
-//        newsList.add(new News(1,R.drawable.ic_launcher_background,"Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Is This Long Title Lorem De rom","Poka Poka","Lorem ipsum le lorem bla bla lorem ipsum kjasd kajsnd kasd asd ajs dasd asdoa sdaosidniasodna askjda sd as dasjdasjdnasdandandansdkjdanskdj"));
-//        newsList.add(new News(1,R.drawable.ic_launcher_background,"My Title 2","Dev","Lorem Ipsum"));
-//        newsList.add(new News(1,R.drawable.ic_launcher_background,"Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Title For Ipsum Is This Long Title Lorem De rom","Poka Poka","Lorem ipsum le lorem bla bla lorem ipsum kjasd kajsnd kasd asd ajs dasd asdoa sdaosidniasodna askjdaa sdaosidniasodna askjdaa sdaosidniasodna askjdaa sdaosidniasodna askjda a sdaosidniasodna askjdaa sdaosidniasodna askjda a sdaosidniasodna askjda  sd as dasjdasjdnasdandandansdkjdanskdj"));
-
-//        adapter = new NewsAdapter(this, newsList);
-//        recyclerView.setAdapter(adapter);
-
-        adapter = new NewsAdapter(this, newsList);
-        recyclerView.setAdapter(adapter);
-
-        String[] list = {"google","apple","nepal","ISS"};
-        String makeQuery = "";
-
-        //More News Added here...Array is above///
-        for(int i = 0 ; i < list.length ; i++){
-            makeQuery = makeQuery + list[i];
-            if(i == list.length-1) {
-                break;
-            }
-            makeQuery = makeQuery + "%20OR%20";
-        }
-        search(recyclerView, makeQuery);
+        search(recyclerView, "top");
     }
 
     @Override
@@ -141,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
             loading_screen = (RelativeLayout) findViewById(R.id.loading_screen);
             msg = (TextView) findViewById(R.id.msg);
 
-            //Toast.makeText(MainActivity.this, "Fetching News, If you see this it is fetching", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -173,10 +139,8 @@ public class MainActivity extends AppCompatActivity {
 
                 ArrayList<News> newsArrayList = new ArrayList<>();
                 String iconUrl = "";
-                //IconDownloader id = new IconDownloader();
-                //Bitmap myBitmap = null;
 
-                for(int i = 0 ; i < 15 ; i++){
+                for(int i = 0 ; i < 10 ; i++){
                     try {
                         JSONObject jsonObjectArticles = arr.getJSONObject(i);
                         title = jsonObjectArticles.getString("title");
@@ -186,27 +150,17 @@ public class MainActivity extends AppCompatActivity {
                         url = jsonObjectArticles.getString("url");
 
                         if (status.equals("error")) {
-                            Toast.makeText(MainActivity.this, "API ERROR", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TopNews.this, "API ERROR", Toast.LENGTH_SHORT).show();
                         } else {
-                            //Toast.makeText(MainActivity.this, "Grabbed API JSON, At least", Toast.LENGTH_SHORT).show();
-
                             iconUrl = image;
                             //NOTE: BUG: ERROR ASYNC FOR IMAGE DOWNLOAD NEEDED
-                            //try {
-                                //Bitmap myBitmap = id.execute(iconUrl).get();
-                                //new IconDownloader().execute(iconUrl).get()
-                                newsArrayList.add(new News(i, iconUrl , title, author, description, url));
-                            /*} catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } catch (ExecutionException e) {
-                                e.printStackTrace();
-                            }*/
+                            newsArrayList.add(new News(i, iconUrl , title, author, description, url));
                         }
 
                         //newsArrayList.add(new News(i, myBitmap, title, author, description));
                     }catch (Exception e){
                         e.printStackTrace();
-                        Toast.makeText(MainActivity.this, "World's Weirdest Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TopNews.this, "World's Weirdest Error", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -222,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(MainActivity.this, title, Toast.LENGTH_SHORT).show();
                 //Toast.makeText(MainActivity.this, image, Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
-                Toast.makeText(MainActivity.this, "Could Not Fetch", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TopNews.this, "Could Not Fetch", Toast.LENGTH_SHORT).show();
                 msg.setText("No Stable Internet");
                 loading_screen.setBackgroundColor(getResources().getColor(R.color.danger));
                 loading_screen.animate().translationYBy(0).setDuration(500);
@@ -264,9 +218,6 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(run,200);
     }
 
-//    String[] list = {"top","apple","nepal","ISS"};
-//    int curr = 0;
-
     public void addToList(ArrayList<News> newsArrayList){
         for(int i = 0 ; i < newsArrayList.size() ; i++){
             newsList.add(newsArrayList.get(i));
@@ -274,39 +225,10 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new NewsAdapter(this, newsList);
         recyclerView.setAdapter(adapter);
-
-//        //More News Added here...Array is above///
-//        if(curr < list.length){
-//            search(recyclerView, list[curr]);
-//            curr++;
-//        }
-//        //Note:: This this and above comment and code in between
     }
 
-    public void showToast(String message){
-        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-    }
-
-//    public void intenter(String url){
-//        Intent newsIntent = new Intent(this, NewsActivity.class);
-//        newsIntent.putExtra("url",url);
-//        this.startActivity(newsIntent);
-//    }
-
-    public void intenter(){
-        Intent newsIntent = new Intent(this, NewsActivity.class);
-        this.startActivity(newsIntent);
-    }
-
-//    public void addToList(int id, Bitmap image, String title, String author, String description){
-//        newsList.add(new News(1,image,title,author,description));
-//        adapter = new NewsAdapter(this, newsList);
-//        recyclerView.setAdapter(adapter);
-//    }
-
-    public void topNews(View view){
-        Intent newsIntent = new Intent(this, TopNews.class);
-        this.startActivity(newsIntent);
+    public void back(View view){
+        this.finish();
     }
 
 }

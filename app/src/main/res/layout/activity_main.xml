@@ -6,22 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
-
-    <TextView
-        android:id="@+id/headlines"
+    <LinearLayout
+        android:id="@+id/top"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Popular Highlights"
-        android:textSize="25sp"
-        android:paddingLeft="10dp"/>
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/headlines"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="News For You"
+            android:textSize="25sp"
+            android:paddingLeft="10dp"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="Top News"
+            android:layout_height="wrap_content"
+            android:onClick="topNews"/>
+
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/headlines">
+        android:layout_below="@+id/top">
 
 
     </android.support.v7.widget.RecyclerView>
@@ -30,16 +43,58 @@
         android:id="@+id/loading_screen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:layout_alignParentBottom="true">
+        android:background="@color/mattblack"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:alpha="0.8">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher_round"
+            android:layout_marginTop="100dp"/>
         <TextView
             android:id="@+id/msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Loading..."
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="News For You\n\n\n\nLoading..."
+            android:gravity="center"
             android:textColor="@color/white"
             android:layout_centerInParent="true"
-            android:textSize="30dp"/>
+            android:textSize="30dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/splash_after"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mattblack"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:alpha="1">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@mipmap/ic_launcher_round"
+            android:layout_marginTop="100dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="News App"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"
+            android:textSize="30dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="By: Niush Sitaula"
+            android:textColor="@color/white"
+            android:gravity="bottom"
+            android:textSize="20dp"
+            android:paddingBottom="20dp"/>
     </RelativeLayout>
 
 </RelativeLayout>

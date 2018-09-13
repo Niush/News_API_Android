@@ -51,7 +51,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         newsViewHolder.descriptionView.setText(news.getDescription());
         newsViewHolder.titleView.setText(news.getTitle());
         newsViewHolder.authorView.setText(news.getAuthor());
-        Picasso.get().load(news.getImage()).into(newsViewHolder.imageView);
+        if(news.getAuthor() == null || news.getAuthor().equalsIgnoreCase("") || news.getAuthor().equalsIgnoreCase("null")){
+            newsViewHolder.authorView.setText("Anonymous");
+        }
+        Picasso.get().load(news.getImage()).placeholder(R.drawable.ic_launcher_background).into(newsViewHolder.imageView);
 //        try {
 //            newsViewHolder.imageView.setImageBitmap(new IconDownloader().execute(news.getImage()).get());
 //        } catch (ExecutionException e) {
@@ -66,16 +69,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                 //Intent openNews = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(newsList.get(i).getUrl().toString()));
                 //mCtx.startActivity(openNews);
 
-//                MainActivity mainActivity = new MainActivity();
-//                mainActivity.intenter(newsList.get(i).getUrl().toString());
-//                mainActivity.intenter();
-
                 Toast.makeText(mCtx, news.getTitle(), Toast.LENGTH_SHORT).show();
-                Intent newsIntent = new Intent(mCtx , NewsActivity.class);
+                Intent newsIntent = new Intent(mCtx, NewsActivity.class);
                 //newsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 ActivityOptions options = ActivityOptions.makeCustomAnimation(mCtx, R.anim.pull_in_from_right, R.anim.pull_out_to_left);
-                newsIntent.putExtra("url",newsList.get(i).getUrl().toString());
-                newsIntent.putExtra("title",newsList.get(i).getTitle().toString());
+                newsIntent.putExtra("url", newsList.get(i).getUrl().toString());
+                newsIntent.putExtra("title", newsList.get(i).getTitle().toString());
                 mCtx.startActivity(newsIntent, options.toBundle());
             }
         });
@@ -88,7 +87,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         return newsList.size();
     }
 
-    class NewsViewHolder extends RecyclerView.ViewHolder{
+    class NewsViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
         TextView titleView;
@@ -116,44 +115,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             descriptionView = itemView.findViewById(R.id.description);
         }
     }
+}
 
-    public class IconDownloader extends AsyncTask<String,Void,Bitmap> {
-
-        private Bitmap myBitmap = null;
-
-        //Photo Loading is Taking A Lot Of Time...ui overload..and stuck
-
-        @Override
-        protected Bitmap doInBackground(final String... urls) {
-            URL url;
-            HttpURLConnection httpURLConnection = null;
-
-            try {
-                url = new URL(urls[0]);
-                httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.connect();
-                InputStream in = httpURLConnection.getInputStream();
-
-                myBitmap = BitmapFactory.decodeStream(in);
-                //Image Size//
-                int nh = (int) (myBitmap.getHeight() * (250.0 / myBitmap.getWidth()));
-                Bitmap scaled = Bitmap.createScaledBitmap(myBitmap, 250, nh, true);
-                return scaled;
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-    }
-
+//    public class IconDownloader extends AsyncTask<String,Void,Bitmap> {
 //
-//    public static class BackgroundTask extends AsyncTask<String,Void,Bitmap> {
+//        private Bitmap myBitmap = null;
+//
+//        //Photo Loading is Taking A Lot Of Time...ui overload..and stuck
 //
 //        @Override
-//        protected Bitmap doInBackground(String... urls) {
+//        protected Bitmap doInBackground(final String... urls) {
 //            URL url;
 //            HttpURLConnection httpURLConnection = null;
 //
@@ -161,36 +132,19 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 //                url = new URL(urls[0]);
 //                httpURLConnection = (HttpURLConnection) url.openConnection();
 //                httpURLConnection.connect();
-//
 //                InputStream in = httpURLConnection.getInputStream();
 //
-//                Bitmap myBitmap = BitmapFactory.decodeStream(in);
-//
-//                return myBitmap;
+//                myBitmap = BitmapFactory.decodeStream(in);
+//                //Image Size//
+//                int nh = (int) (myBitmap.getHeight() * (250.0 / myBitmap.getWidth()));
+//                Bitmap scaled = Bitmap.createScaledBitmap(myBitmap, 250, nh, true);
+//                return scaled;
 //            } catch (MalformedURLException e) {
 //                e.printStackTrace();
-//                return null;
 //            } catch (IOException e) {
 //                e.printStackTrace();
-//                return null;
 //            }
+//            return null;
 //        }
-//    }
 //
-//    public Bitmap getImage(){
-//        BackgroundTask bt = new BackgroundTask();
-//        try {
-//            Bitmap downloadedImage = bt.execute("https://niush.neocities.org/logo.png").get();
-//            return downloadedImage;
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//            return null;
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
 //    }
-
-}
-
-

@@ -1,6 +1,8 @@
 package tk.niush.staticrecyclerview;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -49,7 +51,7 @@ public class NewsActivity extends AppCompatActivity{
         webView.canGoForward();
 
         TextView textView = (TextView) findViewById(R.id.loading);
-        textView.animate().scaleY(0).setDuration(500).setStartDelay(3000);
+        textView.animate().scaleY(0).translationY(-500).setDuration(500).setStartDelay(3000);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -57,7 +59,6 @@ public class NewsActivity extends AppCompatActivity{
                 webView.reload();
             }
         });
-
     }
 
     @Override
@@ -74,5 +75,11 @@ public class NewsActivity extends AppCompatActivity{
         intent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
         intent.putExtra(Intent.EXTRA_TEXT, shareHead + " Link: " + shareBody);
         startActivity(Intent.createChooser(intent, "Share This News :"));
+    }
+
+    public void browse(View view){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
     }
 }

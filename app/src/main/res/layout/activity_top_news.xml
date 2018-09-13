@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".TopNews">
+
+<LinearLayout
+    android:id="@+id/top"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/headlines"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:text="Top Headlines"
+        android:textSize="25sp"
+        android:paddingLeft="10dp"/>
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:text="Back"
+        android:layout_height="wrap_content"
+        android:onClick="back"/>
+
+</LinearLayout>
+
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/recyclerView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:layout_below="@+id/top">
+
+
+</android.support.v7.widget.RecyclerView>
+
+<RelativeLayout
+    android:id="@+id/loading_screen"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/mattblack"
+    android:layout_alignParentBottom="true"
+    android:layout_centerInParent="true"
+    android:alpha="0.8">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher_round"
+        android:layout_marginTop="100dp"/>
+    <TextView
+        android:id="@+id/msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAlignment="center"
+        android:text="Top Highlights\n\n\n\nLoading..."
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_centerInParent="true"
+        android:textSize="30dp" />
+</RelativeLayout>
+
+</RelativeLayout>
