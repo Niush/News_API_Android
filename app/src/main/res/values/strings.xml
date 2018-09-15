@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">StaticRecyclerView</string>
+    <string name="app_name">E-Paper Morning</string>
 
-    <string name="title_activity_news">NewsActivity</string>
+    <string name="title_activity_news">News</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

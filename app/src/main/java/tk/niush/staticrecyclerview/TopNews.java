@@ -45,6 +45,8 @@ public class TopNews extends AppCompatActivity {
         overridePendingTransition(R.anim.pull_in_from_right, R.anim.hold);
         setContentView(R.layout.activity_top_news);
 
+        setTitle("Top Headlines");
+
         newsList = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);

@@ -4,6 +4,7 @@ package tk.niush.staticrecyclerview;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,8 +46,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        overridePendingTransition(R.anim.pull_in_from_right, R.anim.hold);
+        //overridePendingTransition(R.anim.pull_in_from_right, R.anim.hold);
         setContentView(R.layout.activity_main);
+
+        setTitle("Morning E-Paper");
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.mattblack));
+        }
 
         splash_after = (RelativeLayout) findViewById(R.id.splash_after);
         splash_after.animate().translationYBy(-2000).setDuration(500).setStartDelay(4000);
@@ -81,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new NewsAdapter(this, newsList);
         recyclerView.setAdapter(adapter);
 
-        String[] list = {"google","apple","nepal","ISS"};
+        String[] list = {"Imagine_Dragons","Windows","google","nepal","ISS"};
         String makeQuery = "";
 
         //More News Added here...Array is above///
@@ -97,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause(){
-        overridePendingTransition(R.anim.hold, R.anim.pull_out_to_left);
+        //overridePendingTransition(R.anim.hold, R.anim.pull_out_to_left);
         super.onPause();
     }
 
@@ -148,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             //dialog.dismiss();
+            Toast.makeText(MainActivity.this, "Key Loaded From Shared Preferences", Toast.LENGTH_LONG).show();
             loading_screen.animate().translationYBy(2000).setDuration(500).setStartDelay(1000);
 
             String status = "";
@@ -176,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 //IconDownloader id = new IconDownloader();
                 //Bitmap myBitmap = null;
 
-                for(int i = 0 ; i < 15 ; i++){
+                for(int i = 0 ; i < 20 ; i++){
                     try {
                         JSONObject jsonObjectArticles = arr.getJSONObject(i);
                         title = jsonObjectArticles.getString("title");
